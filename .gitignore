@@ -2,6 +2,8 @@
 node_modules
 dist_electron
 out
+cache
+cookies
 /dist
 
 

@@ -1,23 +1,22 @@
 const { app, BrowserWindow, Menu, ipcMain, shell } = require('electron')
 const { getSoftwarePath } = require('./getSoftwarePath')
-const path = require('path')
+// const path = require('path')
+const { spawn } = require('child_process')
 function createWindow() {
   const win = new BrowserWindow({
-    // width: 800,
-    // height: 600,
+    width: 1400,
+    height: 768,
     webPreferences: {
-      nodeIntegration: true,
-      webSecurity: false
+      nodeIntegration: true
     }
   })
 
-  win.maximize()
-  Menu.setApplicationMenu(null)
+  // win.maximize()
+  // Menu.setApplicationMenu(null)
   // win.webContents.openDevTools()
-  process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 
   // win.loadURL('https://test-vshow.fooww.com/group/')
-  win.loadURL('http://localhost:8081/group/')
+  // win.loadURL('http://192.168.1.108:8081/group/')
 }
 
 app.whenReady().then(createWindow)
@@ -36,7 +35,6 @@ app.on('activate', () => {
 
 ipcMain.on('openPC', (event, arg) => {
   getSoftwarePath((clientPath) => {
-    console.log(clientPath)
-    shell.openPath(path.join(clientPath))
+    spawn('cmd', ['/c', clientPath, arg])
   })
 })
