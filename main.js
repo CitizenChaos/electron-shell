@@ -1,6 +1,5 @@
 const { app, BrowserWindow, Menu, ipcMain, shell } = require('electron')
 const { getSoftwarePath } = require('./getSoftwarePath')
-// const path = require('path')
 const { spawn } = require('child_process')
 function createWindow() {
   const win = new BrowserWindow({
@@ -12,11 +11,12 @@ function createWindow() {
   })
 
   // win.maximize()
-  // Menu.setApplicationMenu(null)
+  Menu.setApplicationMenu(null)
   // win.webContents.openDevTools()
 
   // win.loadURL('https://test-vshow.fooww.com/group/')
   // win.loadURL('http://192.168.1.108:8081/group/')
+  win.loadURL('https://beta-vshow.fooww.com/group-electron/')
 }
 
 app.whenReady().then(createWindow)
