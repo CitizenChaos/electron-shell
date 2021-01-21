@@ -1,7 +1,7 @@
 {
   "name": "group-electron",
   "version": "1.0.0",
-  "description": "Fooww",
+  "description": "集团版安装程序",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,7 +10,7 @@
     "make": "electron-forge make"
   },
   "keywords": [],
-  "author": "Fooww",
+  "author": "上海梵讯网络技术有限公司",
   "license": "ISC",
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0-beta.54",
