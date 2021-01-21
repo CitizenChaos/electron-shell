@@ -1,4 +1,5 @@
 const { app, BrowserWindow, Menu, ipcMain, shell } = require('electron')
+const { getSoftwarePath } = require('./getSoftwarePath')
 const path = require('path')
 function createWindow() {
   const win = new BrowserWindow({
@@ -11,7 +12,7 @@ function createWindow() {
   })
 
   win.maximize()
-  // Menu.setApplicationMenu(null)
+  Menu.setApplicationMenu(null)
   // win.webContents.openDevTools()
   process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true
 
@@ -34,7 +35,8 @@ app.on('activate', () => {
 })
 
 ipcMain.on('openPC', (event, arg) => {
-  console.log(arg)
-  let clientPath = 'D:\\梵讯房屋管理系统\\FoowwSoft.exe -' + arg
-  shell.openPath(path.join(clientPath))
+  getSoftwarePath((clientPath) => {
+    console.log(clientPath)
+    shell.openPath(path.join(clientPath))
+  })
 })

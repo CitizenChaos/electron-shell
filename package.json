@@ -21,7 +21,8 @@
     "electron": "^11.2.0"
   },
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "regedit": "^3.0.3"
   },
   "config": {
     "forge": {
