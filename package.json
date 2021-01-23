@@ -7,7 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make-x86": "electron-forge make --platform=win32 --arch=ia32",
+    "make-x64": "electron-forge make --platform=win32 --arch=x64",
+    "pack": "electron-builder --dir",
+    "dist-x86": "electron-builder --win --ia32",
+    "dist-x64": "electron-builder --win --x64",
+    "postinstall": "electron-builder install-app-deps"
   },
   "keywords": [],
   "author": "上海梵讯网络技术有限公司",
@@ -18,37 +23,30 @@
     "@electron-forge/maker-rpm": "^6.0.0-beta.54",
     "@electron-forge/maker-squirrel": "^6.0.0-beta.54",
     "@electron-forge/maker-zip": "^6.0.0-beta.54",
-    "electron": "^11.2.0"
+    "electron": "^11.2.0",
+    "electron-builder": "^22.9.1"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
     "regedit": "^3.0.3"
   },
-  "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "group_electron"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
+  "build": {
+    "appId": "集团版安装程序",
+    "productName": "集团版安装程序",
+    "copyright": "上海梵讯网络技术有限公司",
+    "asar": true,
+    "win": {  
+      "icon": "./assets/IMG_4632.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "./assets/IMG_4632.ico",
+      "uninstallerIcon": "./assets/IMG_4632.ico",
+      "installerHeaderIcon": "./assets/IMG_4632.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
     }
   }
 }

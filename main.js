@@ -1,6 +1,7 @@
 const { app, BrowserWindow, Menu, ipcMain, shell } = require('electron')
 const { getSoftwarePath } = require('./getSoftwarePath')
 const { spawn } = require('child_process')
+const { networkInterfaces } = require('os')
 function createWindow() {
   const win = new BrowserWindow({
     width: 1400,
@@ -37,4 +38,9 @@ ipcMain.on('openPC', (event, arg) => {
   getSoftwarePath((clientPath) => {
     spawn('cmd', ['/c', clientPath, arg])
   })
+})
+// 获取网络
+ipcMain.on('getMAC', (event) => {
+  let interface = networkInterfaces()
+  event.reply('replyMAC', interface)
 })
