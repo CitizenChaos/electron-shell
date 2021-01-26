@@ -6,9 +6,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make-x86": "electron-forge make --platform=win32 --arch=ia32",
-    "make-x64": "electron-forge make --platform=win32 --arch=x64",
     "pack": "electron-builder --dir",
     "dist-x86": "electron-builder --win --ia32",
     "dist-x64": "electron-builder --win --x64",
@@ -35,7 +32,7 @@
     "productName": "集团版安装程序",
     "copyright": "上海梵讯网络技术有限公司",
     "asar": true,
-    "win": {  
+    "win": {
       "icon": "./assets/IMG_4632.ico"
     },
     "nsis": {

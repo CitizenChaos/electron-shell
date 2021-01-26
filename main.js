@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, ipcMain, shell } = require('electron')
+const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 const { getSoftwarePath } = require('./getSoftwarePath')
 const { spawn } = require('child_process')
 const { networkInterfaces } = require('os')
@@ -36,6 +36,8 @@ app.on('activate', () => {
 
 ipcMain.on('openPC', (event, arg) => {
   getSoftwarePath((clientPath) => {
+    console.log('clientPath', clientPath)
+    console.log('arg', arg)
     spawn('cmd', ['/c', clientPath, arg])
   })
 })

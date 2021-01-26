@@ -1,13 +1,24 @@
 let regedit = require('regedit')
-let fs = require('fs')
 exports.getSoftwarePath = function (cb) {
-  let clientPath = ''
-  regedit
-    .list([
-      'HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\梵讯房屋管理系统_is1'
-    ])
-    .on('data', function (entry) {
-      // TODO: null值判断
-      cb(entry.data.values.DisplayIcon.value)
-    })
+  let regeditPath =
+    'HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall'
+  let softwareName = '梵讯房屋管理系统_is1'
+  let hasKey = false
+  regedit.list(regeditPath, (err, res) => {
+    let keys = res[regeditPath].keys
+    for (let i = 0; i < keys.length; i++) {
+      if (keys[i] === '梵讯房屋管理系统_is1') {
+        hasKey = true
+        break
+      }
+    }
+    console.log(hasKey)
+    if (hasKey) {
+      regedit
+        .list([regeditPath + '\\' + softwareName])
+        .on('data', function (entry) {
+          cb(entry.data.values.DisplayIcon.value)
+        })
+    }
+  })
 }
