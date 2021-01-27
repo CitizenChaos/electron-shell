@@ -1,10 +1,42 @@
-const { app, BrowserWindow, Menu, ipcMain } = require('electron')
-const { getSoftwarePath } = require('./getSoftwarePath')
-const { spawn } = require('child_process')
-const { networkInterfaces } = require('os')
-const axios = require('axios')
-var currentLoginUserId = 0
-var currentLoginId = 0
+const {
+  app,
+  BrowserWindow,
+  Menu,
+  ipcMain
+} = require('electron')
+const {
+  getSoftwarePath
+} = require('./getSoftwarePath')
+const {
+  spawn
+} = require('child_process')
+const {
+  networkInterfaces
+} = require('os')
+const axios = require("axios")
+var currentLoginId = 0;
+require('dotenv').config()
+
+const env = process.env.ENV_MODE
+console.log(env)
+const apiUrlPrefixes = {
+  "local": "http://localhost:51138",
+  "test": "http://test-account.fooww.com",
+  "pro": "http://account.fooww.com"
+}
+
+const vshowUrlPrefixes = {
+  "local": "http://192.168.1.108:8081/group/",
+  "test": "https://test-vshow.fooww.com/group/",
+  "pro": "https://vshow.fooww.com/group-electron/"
+}
+
+let urlPrefix = apiUrlPrefixes[env.toLowerCase()]
+let vshowUrlPrefix = vshowUrlPrefixes[env.toLowerCase()]
+
+const requestLogout = async loginId => {
+  return axios.get(`${urlPrefix}/api/login/logout?groupUserOperateLogID=${loginId}`)
+}
 
 let win = null
 
@@ -16,15 +48,15 @@ if (!getTheLock) {
   app.on('second-instance', (event, commandLine, workingDirectory) => {
     // 当运行第二个实例时,将会聚焦到myWindow这个窗口
     if (win) {
-      if (win.isMinimized()) win.restore()
+      if (win.isMinimized()) {
+        win.restore()
+      }
       win.focus()
     }
   })
-  app
-    .whenReady()
-    .then(createWindow)
-    .then((window) => (win = window))
+  app.whenReady().then(createWindow).then(window => win = window)
 }
+
 
 // create browser window
 function createWindow() {
@@ -37,24 +69,26 @@ function createWindow() {
   })
 
   // win.maximize()
-  Menu.setApplicationMenu(null)
+  // Menu.setApplicationMenu(null)
   win.webContents.openDevTools()
 
   // win.loadURL('https://test-vshow.fooww.com/group/')
-  // win.loadURL('http://192.168.1.108:8081/group/')
-  win.loadURL('https://beta-vshow.fooww.com/group-electron/')
-  return win
+  win.loadURL(vshowUrlPrefix)
+  // win.loadURL('https://beta-vshow.fooww.com/group-electron/')
+  win.webContents.on('render-process-gone', async e => {
+    await requestLogout(currentLoginId);
+  })
+  return win;
 }
 
+
 // register event
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-  if (currentLoginUserId && currentLoginId) {
-    axios.get('http://localhost:8001?loginId=' + currentLoginId) // send request
-  }
+app.on('window-all-closed', async (e) => {
+  await requestLogout(currentLoginId);
+  app.exit();
 })
+
+
 
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
@@ -75,7 +109,6 @@ ipcMain.on('getMAC', (event) => {
   event.reply('replyMAC', interface)
 })
 
-ipcMain.on('login-success', (e, arg) => {
-  currentLoginUserId = arg.userId
-  currentLoginId = arg.loginId
+ipcMain.on("login-success", (e, arg) => {
+  currentLoginId = arg.loginId;
 })

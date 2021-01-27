@@ -25,7 +25,9 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "dotenv": "^8.2.0",
     "electron-squirrel-startup": "^1.0.0",
+    "electron-store": "^7.0.0",
     "regedit": "^3.0.3"
   },
   "build": {
