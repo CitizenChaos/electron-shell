@@ -2,6 +2,7 @@ const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 const { getSoftwarePath } = require('./getSoftwarePath')
 const { spawn } = require('child_process')
 const getMAC = require('getmac').default
+const { hostname } = require('os')
 const axios = require('axios')
 
 var currentLoginID = 0
@@ -9,7 +10,6 @@ require('dotenv').config()
 
 // const env = process.env.NODE_ENV
 const env = 'pro'
-console.log(env)
 const apiUrlPrefixes = {
   local: 'http://localhost:51138',
   pro: 'http://account.fooww.com'
@@ -62,7 +62,7 @@ function createWindow() {
   })
 
   win.maximize()
-  // Menu.setApplicationMenu(null)
+  Menu.setApplicationMenu(null)
   // win.webContents.openDevTools()
 
   win.loadURL(vshowUrlPrefix)
@@ -93,8 +93,11 @@ ipcMain.on('openPC', (event, arg) => {
   })
 })
 // 获取MAC
-ipcMain.on('getMAC', (event) => {
-  event.reply('replyMAC', getMAC())
+ipcMain.on('getMachineInfo', (event) => {
+  event.reply('replyMachineInfo', {
+    location: getMAC(),
+    machineName: hostname()
+  })
 })
 
 ipcMain.on('login-success', (e, arg) => {
