@@ -36,15 +36,15 @@
     "copyright": "上海梵讯网络技术有限公司",
     "asar": true,
     "win": {
-      "icon": "./assets/IMG_4632.ico"
+      "icon": "./assets/favicon.ico"
     },
     "nsis": {
       "oneClick": false,
       "allowElevation": true,
       "allowToChangeInstallationDirectory": true,
-      "installerIcon": "./assets/IMG_4632.ico",
-      "uninstallerIcon": "./assets/IMG_4632.ico",
-      "installerHeaderIcon": "./assets/IMG_4632.ico",
+      "installerIcon": "./assets/favicon.ico",
+      "uninstallerIcon": "./assets/favicon.ico",
+      "installerHeaderIcon": "./assets/favicon.ico",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true
     }

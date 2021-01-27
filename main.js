@@ -1,41 +1,32 @@
-const {
-  app,
-  BrowserWindow,
-  Menu,
-  ipcMain
-} = require('electron')
-const {
-  getSoftwarePath
-} = require('./getSoftwarePath')
-const {
-  spawn
-} = require('child_process')
-const {
-  networkInterfaces
-} = require('os')
-const axios = require("axios")
-var currentLoginId = 0;
+const { app, BrowserWindow, Menu, ipcMain } = require('electron')
+const { getSoftwarePath } = require('./getSoftwarePath')
+const { spawn } = require('child_process')
+const { networkInterfaces } = require('os')
+const axios = require('axios')
+var currentLoginId = 0
 require('dotenv').config()
 
 const env = process.env.ENV_MODE
 console.log(env)
 const apiUrlPrefixes = {
-  "local": "http://localhost:51138",
-  "test": "http://test-account.fooww.com",
-  "pro": "http://account.fooww.com"
+  local: 'http://localhost:51138',
+  test: 'http://test-account.fooww.com',
+  pro: 'http://account.fooww.com'
 }
 
 const vshowUrlPrefixes = {
-  "local": "http://192.168.1.108:8081/group/",
-  "test": "https://test-vshow.fooww.com/group/",
-  "pro": "https://vshow.fooww.com/group-electron/"
+  local: 'http://192.168.1.108:8081/group/',
+  test: 'https://test-vshow.fooww.com/group/',
+  pro: 'https://beta-vshow.fooww.com/group-electron/'
 }
 
 let urlPrefix = apiUrlPrefixes[env.toLowerCase()]
 let vshowUrlPrefix = vshowUrlPrefixes[env.toLowerCase()]
 
-const requestLogout = async loginId => {
-  return axios.get(`${urlPrefix}/api/login/logout?groupUserOperateLogID=${loginId}`)
+const requestLogout = async (loginId) => {
+  return axios.get(
+    `${urlPrefix}/api/login/logout?groupUserOperateLogID=${loginId}`
+  )
 }
 
 let win = null
@@ -54,9 +45,11 @@ if (!getTheLock) {
       win.focus()
     }
   })
-  app.whenReady().then(createWindow).then(window => win = window)
+  app
+    .whenReady()
+    .then(createWindow)
+    .then((window) => (win = window))
 }
-
 
 // create browser window
 function createWindow() {
@@ -75,20 +68,17 @@ function createWindow() {
   // win.loadURL('https://test-vshow.fooww.com/group/')
   win.loadURL(vshowUrlPrefix)
   // win.loadURL('https://beta-vshow.fooww.com/group-electron/')
-  win.webContents.on('render-process-gone', async e => {
-    await requestLogout(currentLoginId);
+  win.webContents.on('render-process-gone', async (e) => {
+    await requestLogout(currentLoginId)
   })
-  return win;
+  return win
 }
-
 
 // register event
 app.on('window-all-closed', async (e) => {
-  await requestLogout(currentLoginId);
-  app.exit();
+  await requestLogout(currentLoginId)
+  app.exit()
 })
-
-
 
 app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
@@ -109,6 +99,6 @@ ipcMain.on('getMAC', (event) => {
   event.reply('replyMAC', interface)
 })
 
-ipcMain.on("login-success", (e, arg) => {
-  currentLoginId = arg.loginId;
+ipcMain.on('login-success', (e, arg) => {
+  currentLoginId = arg.loginId
 })
