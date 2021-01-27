@@ -8,7 +8,7 @@ var currentLoginID = 0
 require('dotenv').config()
 
 // const env = process.env.NODE_ENV
-const env = 'local'
+const env = 'pro'
 console.log(env)
 const apiUrlPrefixes = {
   local: 'http://localhost:51138',
