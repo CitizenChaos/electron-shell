@@ -1,8 +1,9 @@
 const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 const { getSoftwarePath } = require('./getSoftwarePath')
 const { spawn } = require('child_process')
-const { networkInterfaces } = require('os')
+const getMAC = require('getmac').default
 const axios = require('axios')
+
 var currentLoginID = 0
 require('dotenv').config()
 
@@ -91,11 +92,9 @@ ipcMain.on('openPC', (event, arg) => {
     spawn('cmd', ['/c', clientPath, arg])
   })
 })
-// 获取网络
+// 获取MAC
 ipcMain.on('getMAC', (event) => {
-  let interface = networkInterfaces()
-  console.log(interface)
-  event.reply('replyMAC', interface)
+  event.reply('replyMAC', getMAC())
 })
 
 ipcMain.on('login-success', (e, arg) => {
