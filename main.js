@@ -3,29 +3,28 @@ const { getSoftwarePath } = require('./getSoftwarePath')
 const { spawn } = require('child_process')
 const { networkInterfaces } = require('os')
 const axios = require('axios')
-var currentLoginId = 0
+var currentLoginID = 0
 require('dotenv').config()
 
-const env = process.env.ENV_MODE
+// const env = process.env.NODE_ENV
+const env = 'local'
 console.log(env)
 const apiUrlPrefixes = {
   local: 'http://localhost:51138',
-  test: 'http://test-account.fooww.com',
   pro: 'http://account.fooww.com'
 }
 
 const vshowUrlPrefixes = {
   local: 'http://192.168.1.108:8081/group/',
-  test: 'https://test-vshow.fooww.com/group/',
   pro: 'https://beta-vshow.fooww.com/group-electron/'
 }
 
 let urlPrefix = apiUrlPrefixes[env.toLowerCase()]
 let vshowUrlPrefix = vshowUrlPrefixes[env.toLowerCase()]
 
-const requestLogout = async (loginId) => {
+const requestLogout = async (loginID) => {
   return axios.get(
-    `${urlPrefix}/api/login/logout?groupUserOperateLogID=${loginId}`
+    `${urlPrefix}/api/login/logout?groupUserOperateLogID=${loginID}`
   )
 }
 
@@ -61,22 +60,21 @@ function createWindow() {
     }
   })
 
-  // win.maximize()
+  win.maximize()
   // Menu.setApplicationMenu(null)
-  win.webContents.openDevTools()
+  // win.webContents.openDevTools()
 
-  // win.loadURL('https://test-vshow.fooww.com/group/')
   win.loadURL(vshowUrlPrefix)
-  // win.loadURL('https://beta-vshow.fooww.com/group-electron/')
+
   win.webContents.on('render-process-gone', async (e) => {
-    await requestLogout(currentLoginId)
+    await requestLogout(currentLoginID)
   })
   return win
 }
 
 // register event
 app.on('window-all-closed', async (e) => {
-  await requestLogout(currentLoginId)
+  await requestLogout(currentLoginID)
   app.exit()
 })
 
@@ -96,9 +94,10 @@ ipcMain.on('openPC', (event, arg) => {
 // 获取网络
 ipcMain.on('getMAC', (event) => {
   let interface = networkInterfaces()
+  console.log(interface)
   event.reply('replyMAC', interface)
 })
 
 ipcMain.on('login-success', (e, arg) => {
-  currentLoginId = arg.loginId
+  currentLoginID = arg.loginID
 })
