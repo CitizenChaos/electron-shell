@@ -3,6 +3,8 @@
  */
 const { dialog } = require('electron')
 let regedit = require('regedit')
+regedit.setExternalVBSLocation('./resources/vbs')
+
 exports.getSoftwarePath = function (cb) {
   let uninstallPath =
     'HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall'
