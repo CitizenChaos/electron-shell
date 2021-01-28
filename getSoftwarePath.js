@@ -4,21 +4,21 @@
 const { dialog } = require('electron')
 let regedit = require('regedit')
 exports.getSoftwarePath = function (cb) {
-  let regeditPath =
+  let uninstallPath =
     'HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall'
   let softwareName = '梵讯房屋管理系统_is1'
   let hasKey = false
-  regedit.list(regeditPath, (err, res) => {
-    let keys = res[regeditPath].keys
+  regedit.list(uninstallPath, (err, res) => {
+    let keys = res[uninstallPath].keys
     for (let i = 0; i < keys.length; i++) {
-      if (keys[i] === '梵讯房屋管理系统_is1') {
+      if (keys[i] === softwareName) {
         hasKey = true
         break
       }
     }
     if (hasKey) {
       regedit
-        .list([regeditPath + '\\' + softwareName])
+        .list([uninstallPath + '\\' + softwareName])
         .on('data', function (entry) {
           cb(entry.data.values.DisplayIcon.value)
         })

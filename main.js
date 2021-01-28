@@ -11,12 +11,13 @@ require('dotenv').config()
 // const env = process.env.NODE_ENV
 const env = 'pro'
 const apiUrlPrefixes = {
-  local: 'http://localhost:51138',
-  pro: 'http://account.fooww.com'
+  // local: 'http://localhost:51138',
+  local: 'https://account.fooww.com',
+  pro: 'https://account.fooww.com'
 }
 
 const vshowUrlPrefixes = {
-  local: 'http://192.168.1.108:8081/group/',
+  local: 'http://localhost:8081/group/',
   pro: 'https://beta-vshow.fooww.com/group-electron/'
 }
 
